@@ -26,11 +26,11 @@ releaseProcess := Seq[ReleaseStep](
   //publishArtifacts,
   //setNextVersion,                         
   //commitNextVersion,                  
-  //releaseStepCommand("+publishSigned"),
-  //releaseStepCommand("sonatypeBundleRelease"),
   releaseStepCommand("+publishSigned"),
-  releaseStepCommand("sonatypeReleaseAll"),
-  pushChanges               
+  releaseStepCommand("sonatypeBundleRelease"),
+  //releaseStepCommand("+publishSigned"),
+  //releaseStepCommand("sonatypeReleaseAll"),
+  //pushChanges               
 )
 
 def supportedScalaVersion = Seq(Constants.scala212, Constants.scala213)

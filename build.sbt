@@ -7,7 +7,7 @@ releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseVersionBump := sbtrelease.Version.Bump.Minor
 releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
-sonatypeProfileName := "org.openmole"
+sonatypeProfileName := Constants.organization
 releaseCrossBuild := true
 publishConfiguration := publishConfiguration.value.withOverwrite(true)
 
@@ -35,7 +35,7 @@ def supportedScalaVersion = Seq(Constants.scala212, Constants.scala213)
 
 lazy val sharedSettings = Seq(
   version := Constants.version,
-  organization := "org.openmole",
+  organization := Constant.organization,
   scalaVersion := Constants.scala213,
   crossScalaVersions := supportedScalaVersion,
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.0" % "provided",

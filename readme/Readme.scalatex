@@ -59,7 +59,7 @@
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
 
     @hl.scala
-      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "@scalatex.Constants.version")
+      addSbtPlugin("org.openmole" % "scalatex-sbt-plugin" % "@scalatex.Constants.version")
 
     @p
       And the following to your project in your @code{build.sbt}:

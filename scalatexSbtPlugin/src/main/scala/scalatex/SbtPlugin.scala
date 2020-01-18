@@ -54,7 +54,7 @@ object SbtPlugin extends sbt.AutoPlugin {
   )
   override val projectSettings = inConfig(Test)(mySeq) ++ inConfig(Compile)(mySeq) ++ Seq(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatex-api" % scalatexVersion
+      "org.openmole" %% "scalatex-api" % scalatexVersion
     ),
     watchSources ++= {
       val compileTarget = (target in Compile).value

@@ -35,7 +35,7 @@ def supportedScalaVersion = Seq(Constants.scala212, Constants.scala213)
 
 lazy val sharedSettings = Seq(
   version := Constants.version,
-  organization := Constant.organization,
+  organization := Constants.organization,
   scalaVersion := Constants.scala213,
   crossScalaVersions := supportedScalaVersion,
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.0" % "provided",

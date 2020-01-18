@@ -117,7 +117,7 @@ object ScalatexReadme{
         Seq(generated)
       },
       (SbtPlugin.scalatexDirectory in Compile) := file(projectId),
-      libraryDependencies += "com.lihaoyi" %% "scalatex-site" % SbtPlugin.scalatexVersion,
+      libraryDependencies += "org.openmole" %% "scalatex-site" % SbtPlugin.scalatexVersion,
       scalaVersion := _root_.scalatex.Constants.scala212
     ).enablePlugins(SbtPlugin)
 }

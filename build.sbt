@@ -9,8 +9,6 @@ releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
 sonatypeProfileName := "org.openmole"
 releaseCrossBuild := true
-publishMavenStyle := true
-//publishTo in ThisBuild := sonatypePublishToBundle.value
 publishConfiguration := publishConfiguration.value.withOverwrite(true)
 
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
@@ -26,7 +24,7 @@ releaseProcess := Seq[ReleaseStep](
   //publishArtifacts,
   //setNextVersion,                         
   //commitNextVersion,                  
-  releaseStepCommand("+publishSigned"),
+  releaseStepCommandAndRemaining("+publishSigned"),
   releaseStepCommand("sonatypeBundleRelease"),
   //releaseStepCommand("+publishSigned"),
   //releaseStepCommand("sonatypeReleaseAll"),
@@ -43,7 +41,9 @@ lazy val sharedSettings = Seq(
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.0" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.2.0"),
   autoCompilerPlugins := true,
-  publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
+  publishMavenStyle := true,
+  publishTo := sonatypePublishToBundle.value,
+  //publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
   pomExtra :=
     <url>https://github.com/lihaoyi/Scalatex</url>
       <licenses>

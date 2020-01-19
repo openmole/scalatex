@@ -225,7 +225,7 @@ object ParserTests extends utest.TestSuite{
             |  omg
             |@else
             |  wtf""".stripMargin,
-          TTTT(_),
+          IndentIfElse(_),
           Block.IfElse(
             0,
             "if(true)",

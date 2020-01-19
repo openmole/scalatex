@@ -98,13 +98,6 @@ class Parser(indent: Int = 0) {
     }
   }
 
-  def TTTT[_: P] = {
-    P(Index ~ IfHead ~ IfBlockSuffix ).map {
-      case (w, a, (b, c)) => Ast.Block.IfElse(w, a, b, c)
-    }
-  }
-
-
   def ForHead[_: P] = {
     def ForBody = P( "(" ~/ ExprCtx.Enumerators ~ ")" | "{" ~/ StatCtx.Enumerators ~ "}" )
     P( Index ~ (`for` ~/ ForBody).! )

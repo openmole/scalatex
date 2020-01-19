@@ -76,17 +76,6 @@ class Parser(indent: Int = 0) {
     }
   }
 
-  //def block[_: P]: P[Int] = P( CharIn("+\\-*/").! ~/ blockBody).map(eval)
-
-//  def IndentBlock[_: P] =
-//    &("\n".rep(1) ~ IndentSpaces.!).flatMap { _ =>
-//      P(("\n".rep(1) ~ IndentSpaces.!) ~ Index).flatMap {
-//        case (nextIndent, offsetIndex) =>
-//          if (nextIndent.length <= indent) Fail
-//          else new Parser(nextIndent.length, offsetIndex).Body
-//      }
-//    }
-
   def IfHead[_: P] = P( (`if` ~/ "(" ~ ExprCtx.Expr ~ ")").! )
   def IfSuffix[_: P] = P( BraceBlock ~ (K.W("else") ~/ BraceBlock).?  )
   def IfElse[_: P] = P( Index ~ IfHead ~ IfSuffix).map { case (w, a, (b, c)) => Ast.Block.IfElse(w, a, b, c) }

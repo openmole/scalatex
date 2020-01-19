@@ -2,7 +2,7 @@
 
 import scala.reflect.internal.util.{BatchSourceFile, SourceFile, OffsetPosition}
 import scala.reflect.io.{PlainFile, AbstractFile}
-import scala.reflect.macros.{TypecheckException, Context}
+import scala.reflect.macros._
 import scalatags.Text.all._
 import scalatex.stages.{Ast, Parser, Compiler}
 import scala.language.experimental.macros
@@ -19,6 +19,7 @@ package object scalatex {
    */
   def twf(expr: String): Frag = macro Internals.applyMacroFile
   object Internals {
+    import whitebox._
 
     def twRuntimeErrors(expr: String): Frag = macro applyMacroRuntimeErrors
     def twfRuntimeErrors(expr: String): Frag = macro applyMacroFileRuntimeErrors

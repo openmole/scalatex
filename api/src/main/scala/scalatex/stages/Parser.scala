@@ -1,8 +1,6 @@
 package scalatex
 package stages
-import acyclic.file
 
-import scalaparse.Scala
 import scalaparse.Scala._
 import scalaparse.syntax._
 import fastparse._, NoWhitespace._
@@ -21,20 +19,6 @@ object Parser extends ((String, Int) => Parsed[Ast.Block]){
 
 class Parser(indent: Int = 0) {
   import scalaparse.syntax.{Key => K}
-
-//  /**
-//   * Wraps another parser, succeeding/failing identically
-//   * but consuming no input
-//   */
-//  case class LookaheadValue[T](p: P[T]) extends P[T]{
-//    def parseRec(cfg: fastparse.core.ParseCtx[Char, String], index: Int) = {
-//      p.parseRec(cfg, index) match{
-//        case s: Mutable.Success[T] => success(cfg.success, s.value, index, Set.empty, false)
-//        case f: Mutable.Failure => failMore(f, index, cfg.logDepth)
-//      }
-//    }
-//    override def toString = s"&($p)"
-//  }
 
   /**
    * This only needs to parse the second `@`l the first one is
@@ -96,19 +80,45 @@ class Parser(indent: Int = 0) {
     (ForHead ~ (IndentBlock | BraceBlock)).map(Ast.Block.For.tupled)
   )
 
-  def ScalaChain[_: P] = P( Index ~ Code ~ Extension.rep ).map {
-    case (x, c, ex) => Ast.Chain(x, c, ex)
+  def ScalaChain[_: P] = P( Index ~ Code ~ TypeAndArgs ~ Extension.rep.map(_.flatten) ).map {
+    case (x, c, ta, ex) => Ast.Chain(x, c, ta ++ ex)
   }
 
-  def Extension[_: P] = P(
-    // Not cutting after the ".", because full-stops are very common
-    // in english so this results in lots of spurious failures
-    (Index ~ "." ~ Identifiers.Id.!).map(Ast.Chain.Prop.tupled) |
-    (Index ~ TypeArgs.!).map(Ast.Chain.TypeArgs.tupled) |
-    (Index ~ ParenArgList.!).map(Ast.Chain.Args.tupled) |
-    BraceBlock
-  )
+  def TypeArgsVal[_: P] = (Index ~ TypeArgs.!)
+  def ParenArgListVal[_: P] = (Index ~ ParenArgList.!)
+  def TypeAndArgs[_: P] = (TypeArgsVal.rep ~ ParenArgListVal.rep).map {
+    case (oT, oA) =>
+      oT.map { case (iT, t) =>  Ast.Chain.TypeArgs(iT, t) } ++
+        oA.map { case(iA, a) => Ast.Chain.Args(iA, a) }
+  }
 
+  def Extension[_: P] = {
+    def InFixCallId = (Index ~ "." ~ Identifiers.Id.! ~ &("."))
+
+    def InFixCall =
+      (InFixCallId ~ TypeArgsVal.rep ~ ParenArgListVal.rep).map {
+        case (iF, f, oT, oA) =>
+          Seq(Ast.Chain.Prop(iF, f)) ++
+            oT.map { case (iT, t) =>  Ast.Chain.TypeArgs(iT, t) } ++
+            oA.map { case(iA, a) => Ast.Chain.Args(iA, a) }
+      }
+
+    def PostFixCallId = (Index ~ "." ~ Identifiers.Id.!)
+
+    def PostFixCall =
+      (PostFixCallId ~ TypeArgsVal.rep ~ ParenArgListVal.rep).map {
+        case (iF, f, oT, oA) =>
+          Seq(Ast.Chain.Prop(iF, f)) ++
+            oT.map { case (iT, t) =>  Ast.Chain.TypeArgs(iT, t) } ++
+            oA.map { case(iA, a) => Ast.Chain.Args(iA, a) }
+      }
+
+    P(
+      // Not cutting after the ".", because full-stops are very common
+      // in english so this results in lots of spurious failures
+      InFixCall | PostFixCall | BraceBlock.map(Seq(_))
+    )
+  }
   def BraceBlock[_: P] = P( "{" ~/ BodyNoBrace  ~ "}" )
 
   def CtrlFlow[_: P] = P( ForLoop | IfElse | ScalaChain | HeaderBlock | `@@` ).map(Seq(_))
@@ -133,8 +143,7 @@ class Parser(indent: Int = 0) {
   def BodyNoBrace[_: P] = P( BodyEx("}") )
   def BodyEx[_: P](exclusions: String) =
     P( Index ~ BodyItem(exclusions).rep ).map {
-      case (i, x) =>
-        Ast.Block(i, flattenText(x.flatten))
+      case (i, x) => Ast.Block(i, flattenText(x.flatten))
     }
 
   def flattenText(seq: Seq[Ast.Block.Sub]) = {

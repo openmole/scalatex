@@ -84,7 +84,7 @@ lazy val api = project.settings(sharedSettings:_*)
     name := "scalatex-api",
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "utest" % Constants.uTest % "test",
-      "com.lihaoyi" %% "scalaparse" % "2.2.3",
+      "com.lihaoyi" %% "scalaparse" % "2.2.4",
       "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ),

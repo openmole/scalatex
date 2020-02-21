@@ -431,6 +431,15 @@ object ParserTests extends utest.TestSuite{
               ))))))))
       )
     }
+    'Coment {
+      'comentBlock - check(
+        """
+          |/* This is a comment */
+          |This isn't""".stripMargin,
+        File(_),
+        Block(0,List(Block.Text(0, "\n"), Block.Comment(1,"/* This is a comment */"), Block.Text(24,"\nThis isn't")))
+      )
+    }
 ////    'Test{
 ////      check(
 ////        "@{() => ()}",

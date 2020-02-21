@@ -133,8 +133,12 @@ class Parser(indent: Int = 0) {
     (Index ~ Indent.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
     (Index ~ BlankLine.!).map(Ast.Block.Text.tupled).map(Seq(_))
   )
+  def Comment[_: P] = P(
+    (Index ~ Literals.Comment.!).map { case (i, c) => Seq(Ast.Block.Comment(i, c)) }
+  )
+
   def BodyItem[_: P](exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
-    IndentedExpr |  "@" ~/ CtrlFlow | BodyText(exclusions)
+    Comment | IndentedExpr |  "@" ~/ CtrlFlow | BodyText(exclusions)
   )
   def Body[_: P] = P( BodyEx("") )
 
@@ -170,6 +174,7 @@ object Ast{
     case class Text(offset: Int, txt: String) extends Block.Sub
     case class For(offset: Int, generators: String, block: Block) extends Block.Sub
     case class IfElse(offset: Int, condition: String, block: Block, elseBlock: Option[Block]) extends Block.Sub
+    case class Comment(offset: Int, str: String) extends Block.Sub
   }
   case class Header(offset: Int, front: String, block: Block) extends Block.Sub with Chain.Sub
 

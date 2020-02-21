@@ -242,6 +242,21 @@ object ExampleTests extends TestSuite{
           """
         )
       }
+      'comment {
+        check(
+          tw("""
+            @val x = {1}
+            @val y = {2}
+
+            /* Comment */
+
+            @x + @y is @(x + y)
+          """),
+          """
+            1 + 2 is 3
+          """
+        )
+      }
     }
 
   }

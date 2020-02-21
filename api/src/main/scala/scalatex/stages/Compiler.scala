@@ -85,6 +85,9 @@ object Compiler{
         case Ast.Block.Text(offset1, str) =>
           incPos(q"$str", offset1)
 
+        case Ast.Block.Comment(offset1, comment) =>
+          incPos(q"Seq[$fragType]()", offset1)
+
         case Ast.Chain(offset1, code, parts) =>
           compileChain(code, parts, offset1)
 

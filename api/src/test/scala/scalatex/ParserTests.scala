@@ -439,6 +439,13 @@ object ParserTests extends utest.TestSuite{
         File(_),
         Block(0,List(Block.Text(0, "\n"), Block.Comment(1,"/* This is a comment */"), Block.Text(24,"\nThis isn't")))
       )
+      'nestedComent - check(
+        """
+          |@b{Comment using /*Test*/}
+          |""".stripMargin,
+        File(_),
+        Block(0,List(Block.Text(0,"\n"), Chain(2,"b",List(Block(4,List(Block.Text(4,"Comment using /*Test*/"))))), Block.Text(27,"\n")))
+      )
     }
 ////    'Test{
 ////      check(

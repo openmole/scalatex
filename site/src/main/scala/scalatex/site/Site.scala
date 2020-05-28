@@ -131,7 +131,7 @@ trait Site{
       val cb = CharBuffer.wrap("<!DOCTYPE html>" + txt)
       val bytes = scala.io.Codec.UTF8.encoder.encode(cb)
 
-      write.over(outputRoot/path, bytes.array(), createFolders = true)
+      write.over(outputRoot/path, bytes.array().slice(bytes.position(), bytes.limit()), createFolders = true)
     }
   }
   def renderTo(outputRoot: Path) = {

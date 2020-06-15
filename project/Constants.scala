@@ -1,6 +1,6 @@
 package scalatex
 object Constants{
-  val version = "0.4.5"
+  val version = "0.4.6"
   val scalaTags = "0.9.1"
   val scala212 = "2.12.10"
   val scala213 = "2.13.2"

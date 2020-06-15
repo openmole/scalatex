@@ -144,14 +144,15 @@ lazy val scrollspy = project
     sharedSettings,
     scalaVersion := Constants.scala213,
     crossScalaVersions := supportedScalaVersion,
-    scalacOptions += "-P:scalajs:suppressExportDeprecations", // see https://github.com/scala-js/scala-js/issues/3092
+    //scalacOptions += "-P:scalajs:suppressExportDeprecations", // see https://github.com/scala-js/scala-js/issues/3092
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.8",
+      "org.scala-js" %%% "scalajs-dom" % "1.0.0",
       "com.lihaoyi" %%% "scalatags" % Constants.scalaTags,
       "io.circe" %%% "circe-core" % Constants.circe,
       "io.circe" %%% "circe-generic" % Constants.circe,
       "io.circe" %%% "circe-parser" % Constants.circe
     ),
+    test := {},
     //emitSourceMaps := false,
     noPublish
   )

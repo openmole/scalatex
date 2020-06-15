@@ -5,7 +5,7 @@ import org.scalajs.dom.ext._
 import org.scalajs.dom.html
 
 import scalajs.js
-import scalajs.js.annotation.JSExport
+import scalajs.js.annotation._
 import scalatags.JsDom.all._
 import scalatags.JsDom.tags2
 import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
@@ -26,7 +26,6 @@ class Toggler(var open: Boolean,
   }
 }
 
-@JSExport
 object Controller{
   lazy val styleTag = tags2.style.render
   dom.document.head.appendChild(styleTag)
@@ -36,7 +35,7 @@ object Controller{
     name.replace(" ", "")
   }
 
-  @JSExport
+  @JSExportTopLevel("scalatexScrollspyController")
   def main(data: js.Any) = {
     (new Controller(data)).init()
   }

@@ -152,7 +152,7 @@ lazy val scrollspy = project
       "io.circe" %%% "circe-generic" % Constants.circe,
       "io.circe" %%% "circe-parser" % Constants.circe
     ),
-    emitSourceMaps := false,
+    //emitSourceMaps := false,
     noPublish
   )
 
